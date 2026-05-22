@@ -1,0 +1,33 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+dependencies {
+  api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+  api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
+  api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+  api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  api "com.github.czyzby:noise4j:$noise4jVersion"
+  annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+  compileOnly "org.projectlombok:lombok:$lombokVersion"
+
+  if(enableGraalNative == 'true') {
+    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+  }
+}
+
+tasks.register('runBlueprintSystemDemo', JavaExec) {
+  group = 'application'
+  description = 'Ejecuta com.siondream.superjumper.BlueprintSystemDemo con el classpath correcto del modulo core.'
+  classpath = sourceSets.main.runtimeClasspath
+  mainClass.set('com.siondream.superjumper.BlueprintSystemDemo')
+}
+
+tasks.register('runFrameworkDemo', JavaExec) {
+  group = 'application'
+  description = 'Ejecuta com.siondream.superjumper.FrameworkDemo con el classpath correcto del modulo core.'
+  classpath = sourceSets.main.runtimeClasspath
+  mainClass.set('com.siondream.superjumper.FrameworkDemo')
+}
+
