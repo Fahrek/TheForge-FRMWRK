@@ -180,7 +180,3 @@ Remove-Item -Recurse -Force "C:\Users\$env:USERNAME\.gradle\daemon" -ErrorAction
 2. Prueba rápido con `:lwjgl3:run`.
 3. Valida Android con `:android:assembleDebug`.
 4. Genera artefactos (`:lwjgl3:jar` o tareas por plataforma) al cerrar iteración.
-
----
-
-Si quieres, puedo añadir una sección de "Arquitectura interna" documentando los paquetes principales de `core` (generación de niveles, reglas, blueprints, sistemas y utilidades) con un diagrama textual.
