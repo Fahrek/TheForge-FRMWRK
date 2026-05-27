@@ -22,6 +22,7 @@ import com.siondream.superjumper.shapes.ShapeGenerator;
 import com.siondream.superjumper.tiles.TileMap;
 import com.siondream.superjumper.tiles.TileType;
 import com.siondream.superjumper.algorithms.CellularAutomataGenerator;
+import com.siondream.superjumper.algorithms.RandomWalkMapGenerator;
 import com.siondream.superjumper.platforms.Platform;
 
 import java.util.ArrayList;
@@ -114,9 +115,21 @@ class ExampleUsage {
         TileMap caveMap = caveGen.execute();
         analyzeMap(caveMap);
 
-        // 10. GENERAR NIVEL DE PLATAFORMAS
+        // 10. EJEMPLO: GENERAR MAZMORRA ORGÁNICA CON RANDOM WALK
+        System.out.println("\n=== Generación con Drunkard's Walk ===");
+        RandomWalkMapGenerator randomWalkGen = new RandomWalkMapGenerator(100, 80, seed + 7);
+        randomWalkGen.setParameter("targetFloorRatio", 0.42f);
+        randomWalkGen.setParameter("walkerCount", 2);
+        randomWalkGen.setParameter("turnChance", 0.35f);
+        randomWalkGen.setParameter("roomChance", 0.05f);
+        randomWalkGen.setParameter("maxRoomCount", 8);
+        TileMap randomWalkMap = randomWalkGen.execute();
+        analyzeMap(randomWalkMap);
+        System.out.println("Habitaciones detectadas: " + randomWalkGen.getRooms().size());
+
+        // 11. GENERAR NIVEL DE PLATAFORMAS
         System.out.println("\n=== Generando nivel de plataformas ===");
-        PlatformGenerator platformGen = new PlatformGenerator(2000, 800, seed + 7);
+        PlatformGenerator platformGen = new PlatformGenerator(2000, 800, seed + 8);
         platformGen.setParameter("platformCount", 30);
         platformGen.setParameter("minGap", 80f);
         platformGen.setParameter("maxGap", 200f);

@@ -2,6 +2,7 @@ package com.siondream.superjumper;
 
 import com.siondream.superjumper.algorithms.BSPMapGenerator;
 import com.siondream.superjumper.algorithms.CellularAutomataGenerator;
+import com.siondream.superjumper.algorithms.RandomWalkMapGenerator;
 import com.siondream.superjumper.biome.BiomeGenerator;
 import com.siondream.superjumper.platforms.PlatformGenerator;
 import com.siondream.superjumper.proceduraldecoration.DecorationDirector;
@@ -54,6 +55,11 @@ public class MasterLevelDirector {
 
             case "OPEN_WORLD":
                 generateOpenWorldLevel(level);
+                break;
+
+            case "RANDOM_WALK":
+            case "DRUNKARDS_WALK":
+                generateRandomWalkLevel(level);
                 break;
 
             default:
@@ -123,5 +129,32 @@ public class MasterLevelDirector {
         level.map = biomeGen.execute();
 
         level.type = "OPEN_WORLD";
+    }
+
+    private void generateRandomWalkLevel(GeneratedLevel level) {
+        RandomWalkMapGenerator walkGen = new RandomWalkMapGenerator(
+            (int)globalParameters.getOrDefault("width", 120),
+            (int)globalParameters.getOrDefault("height", 90),
+            masterSeed
+        );
+
+        walkGen.setParameter("targetFloorRatio", globalParameters.getOrDefault("targetFloorRatio", 0.42f));
+        walkGen.setParameter("walkerCount", globalParameters.getOrDefault("walkerCount", 2));
+        walkGen.setParameter("turnChance", globalParameters.getOrDefault("turnChance", 0.35f));
+        walkGen.setParameter("carveRadius", globalParameters.getOrDefault("carveRadius", 0));
+        walkGen.setParameter("roomChance", globalParameters.getOrDefault("roomChance", 0.05f));
+        walkGen.setParameter("maxRoomCount", globalParameters.getOrDefault("maxRoomCount", 8));
+        walkGen.setParameter("smoothingPasses", globalParameters.getOrDefault("smoothingPasses", 1));
+
+        level.map = walkGen.execute();
+        level.rooms = walkGen.getRooms();
+
+        ItemDistributionDirector itemGen = new ItemDistributionDirector(level.map, level.rooms, masterSeed + 1);
+        level.items = itemGen.execute();
+
+        DecorationDirector decorGen = new DecorationDirector(level.map, masterSeed + 2);
+        level.decorations = decorGen.execute();
+
+        level.type = "RANDOM_WALK";
     }
 }
